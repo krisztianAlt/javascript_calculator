@@ -1,0 +1,77 @@
+pressed_button = ''
+previous_number = ''
+current_number = ''
+operator = ''
+result = ''
+on_the_screen = '0'
+error = false
+
+
+pressed_button is read from user
+if pressed_button == 'C':
+    previous_number = ''
+    current_number = ''
+    operator = ''
+    result = ''
+    on_the_screen = '0'
+    error = false
+if error is false:
+    if pressed_button in '0123456789':
+        if current_number != '0':
+            current_number = current_number + pressed_button
+            on_the_screen = current_number
+    elif pressed_button == '.':
+        if '.' is not in current_number:
+            if current_number == '':
+                current_number == '0'
+            current_number = current_number + pressed_button
+            on_the_screen = current_number
+    elif pressed_button == '+-':
+        if current_number != '' and current_number != '0':
+            current_number = str(num(current_number) * -1))
+            on_the_screen = current_number
+    elif (pressed_button == '+' or '-' or '/' or '*'):
+        if (previous_number == '') AND (operator == '') AND (current_number != ''):
+            previous_number = current_number
+            current_number = ''
+            operator = pressed_button 
+        elif (previous_number != '') AND (operator != '') AND (current_number == ''):
+            operator = pressed_button
+        elif (previous_number != '') AND (current_number != ''):
+            try:
+                result = eval(previous_number + operator + current_number)
+                previous_number = str(result)
+                current_number = ''
+                operator = pressed_button
+                on_the_screen = str(result)
+            except ZeroDivision:
+                error = true
+                on_the_screen = 'Error: division by Zero'
+            except:
+                error = true
+                on_the_screen = 'Error'
+    elif pressed_button == '%':
+        try:
+            if (previous_number != '') AND (operator = '+' or '-' or '/' or '*') AND (current_number != '')):
+                result = eval(previous_number + operator + previous_number*str(num(current_number)*0.01))
+                previous_number = str(result)
+                current_number = ''
+                operator = ''
+                on_the_screen = str(result)
+            else:
+                raise ValueError('Bad usage of percentage') // IN JAVASCRIPT: throw new Error('Bad usage of percentage')
+        except ValueError as err:
+            error = true
+            on_the_screen = err // IN JAVASCRIPT: catch(error){on_the_screen = error}
+        except ZeroDivision:
+            error = true
+            on_the_screen = 'Error: division by Zero'
+    elif pressed_button == '=':
+        if (previous_number != '') AND (operator != '') AND (current_number != ''):
+            try:
+                result = eval(previous_number + operator + current_number)
+                previous_number = str(result)
+                on_the_screen = str(result)
+            except ZeroDivision:
+                error = true
+                on_the_screen = 'Error: division by Zero
