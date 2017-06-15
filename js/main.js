@@ -1,97 +1,154 @@
 var screen = document.getElementById("screen");  
-screen.textContent = '0';  
+screen.textContent = '0';
 var text = screen.textContent;
-var prev_button_content = '';
-var current_button_content = '';
-var screen_content = '0';
-var prev_number = 0;
-var current_number = 0;
-var operators = ['+', '-', '/', '%', '*', '+-', '='];
+
+var pressed_button = '';
+var previous_number = '';
+var current_number = '';
 var operator = '';
-var result = 0;
+var result = '';
+var on_the_screen = '0';
+var we_have_error = false;
+var after_equal = false;
 
 $("button").click(function() {
-    current_button_content = this.value;
-    console.log(current_button_content);
+    pressed_button = this.value;
+    console.log(pressed_button);
     
-    if (current_button_content === 'C') {
-        prev_button_content = '';
-        current_button_content = '';
-        screen_content = '0';
-        prev_number = 0;
-        current_number = 0;
+    if (pressed_button === 'C') {
+        pressed_button = '';
+        previous_number = '';
+        current_number = '';
         operator = '';
-        result = 0;
+        result = '';
+        on_the_screen = '0';
+        we_have_error = false;
+        after_equal = false;
     } else {
-        if (prev_button_content === '' && current_button_content === '0') {
-            screen_content = current_button_content;    
-        } else if (prev_button_content === '0' && current_button_content === '0') {
-            console.log('OLLALAH')
-            screen_content = current_button_content;
-            prev_button_content = '';
-            current_button_content = '';
-        } else if (prev_button_content === '0' && '123456789'.includes(current_button_content)) {
-            console.log('OBLADI')
-            screen_content = current_button_content;
-            prev_button_content = '';
-        } else if (current_button_content === '.' && prev_button_content.includes('.')) {
-            current_button_content = '';
-        } else {
-            if (operators.includes(current_button_content)) {
-                if (prev_number === 0) {
-                    operator = current_button_content;
-                    prev_number = prev_button_content;
-                    if (prev_number[0] === '.') {
-                        prev_number = '0' + prev_number;
-                    }
-                    console.log('Prev number: '+ prev_number);
-                    screen_content = prev_button_content;
+        if (we_have_error === false) {
+            if ('0123456789'.includes(pressed_button)) {
+                if (after_equal) {
+                    previous_number = '';
+                    current_number = pressed_button;
+                    operator = '';
+                    on_the_screen = current_number;
+                    after_equal = false;
                 } else {
-                    current_number = prev_button_content;
-                    if (current_number[0] === '.') {
-                        current_number = '0' + current_number;
+                    if (current_number !== '0') {
+                    current_number = current_number + pressed_button;
+                    on_the_screen = current_number;
                     }
-                    if (current_button_content === '=') {
-                        result = eval(prev_number + operator + current_number);
-                        console.log('EQUAL: ' + prev_number + operator + current_number);
-                        operator = '';
-                    } else {
-                        result = eval(prev_number + operator + current_number);
-                        operator = current_button_content;
-                    }
-                    
-                    console.log('Operator: ' + operator);
-                    console.log('Prev: ' + prev_number);
-                    console.log('Current: ' + current_number);
-                    console.log('Result: ' + result);
-                    screen_content = result;
-                    prev_number = result;
                 }
                 
-                
-            prev_button_content = '';
-            current_button_content = '';    
-            } else {
-                screen_content = prev_button_content + current_button_content;
+            } else if (pressed_button === '.') {
+                if (after_equal) {
+                    previous_number = '';
+                    current_number = '0.';
+                    operator = '';
+                    on_the_screen = current_number;
+                    after_equal = false;
+                }
+                if (current_number.includes('.') === false) {
+                    console.log('Change presage');
+                    if (current_number === '') {
+                        current_number = '0';
+                    }
+                    current_number = current_number + pressed_button;
+                    on_the_screen = current_number;
+                }
+                console.log('Current number: ' + current_number);
+            } else if (pressed_button === '+-') {
+                if (after_equal) {
+                    current_number = previous_number;
+                    previous_number = '';
+                    operator = '';
+                    on_the_screen = current_number;
+                    after_equal = false;
+                }
+                if (current_number !== '' && current_number !== '0') {
+                    current_number = (Number(current_number) * -1).toString();
+                    on_the_screen = current_number;
+                }
+                console.log('Current number: ' + current_number);
+            } else if ('-*/+'.includes(pressed_button)) {
+                console.log('After equal: ' + after_equal);
+                if (after_equal) {
+                    current_number = '';
+                    after_equal = false;
+                }
+                if ((previous_number === '') && (operator === '') && (current_number !== '')) {
+                    previous_number = current_number;
+                    current_number = '';
+                    operator = pressed_button;
+                } else if ((previous_number !== '') && (operator !== '') && (current_number === '')) {
+                    operator = pressed_button;
+                } else if ((previous_number !== '') && (current_number !== '')) {
+                    console.log('Result is coming...');
+                    try {
+                        result = eval(previous_number + operator + current_number);
+                        if (result === Infinity) {
+                            throw new Error('division by Zero');
+                        }
+                        previous_number = result.toString();
+                        current_number = '';
+                        operator = pressed_button;
+                        on_the_screen = result.toString();
+                    } catch (error) {
+                        console.log('Error session');
+                        on_the_screen = error;
+                        we_have_error = true;
+                    }
+                }
+            } else if (pressed_button === '%') {
+                try {
+                    if ((previous_number !== '') && ('-*/+'.includes(operator)) && (current_number !== '')) {
+                        result = eval(previous_number + operator + '(' + previous_number + '*' + (Number(current_number)*0.01).toString() + ')');
+                        if (result === Infinity) {
+                            throw new Error('division by Zero');
+                        }
+                        previous_number = result.toString();
+                        current_number = '';
+                        operator = '';
+                        on_the_screen = result.toString();
+                    } else {
+                        throw new Error('bad usage of percentage');
+                    }
+                } catch (error) {
+                    we_have_error = true;
+                    on_the_screen = error;
+                }
+            } else if (pressed_button === '=') {
+                console.log('Equal track');
+                if ((previous_number !== '') && (operator !== '') && (current_number !== '')) {
+                    console.log('Equal track 2');
+                    try {
+                        result = eval(previous_number + operator + current_number);
+                        console.log('Result: ' + result);
+                        if (result === Infinity) {
+                            throw new Error('division by Zero');
+                        }
+                        after_equal = true;
+                        previous_number = result.toString();
+                        on_the_screen = result.toString();
+                    } catch (error) {
+                        we_have_error = true;
+                        on_the_screen = error;
+                    }
+                }
             }
-            
         }
-        console.log('prev_button_content before: ' + prev_button_content);
-        prev_button_content = prev_button_content + current_button_content;
-        console.log('prev_button_content after: ' + prev_button_content);
-    }
-
-
+    }      
+        
     
 
     // send screen content to HTML file:
-    console.log(screen_content);
+    console.log('To the screen: ' + on_the_screen);
     screen = document.getElementById("screen");  
     if (screen.textContent) {
-        screen.textContent = screen_content;
+        screen.textContent = on_the_screen;
         text = screen.textContent;
     } else if (screen.innerText) {
-        screen.innerText = screen_content;
+        screen.innerText = on_the_screen;
         text = screen.innerText;
     }
 });
