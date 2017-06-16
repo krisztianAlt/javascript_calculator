@@ -13,8 +13,6 @@ var after_equal = false;
 
 $("button").click(function() {
     pressed_button = this.value;
-    console.log(pressed_button);
-    
     if (pressed_button === 'C') {
         pressed_button = '';
         previous_number = '';
@@ -25,6 +23,7 @@ $("button").click(function() {
         we_have_error = false;
         after_equal = false;
     } else {
+
         if (we_have_error === false) {
             if ('0123456789'.includes(pressed_button)) {
                 if (after_equal) {
@@ -49,14 +48,13 @@ $("button").click(function() {
                     after_equal = false;
                 }
                 if (current_number.includes('.') === false) {
-                    console.log('Change presage');
                     if (current_number === '') {
                         current_number = '0';
                     }
                     current_number = current_number + pressed_button;
                     on_the_screen = current_number;
                 }
-                console.log('Current number: ' + current_number);
+                
             } else if (pressed_button === '+-') {
                 if (after_equal) {
                     current_number = previous_number;
@@ -69,9 +67,8 @@ $("button").click(function() {
                     current_number = (Number(current_number) * -1).toString();
                     on_the_screen = current_number;
                 }
-                console.log('Current number: ' + current_number);
+                
             } else if ('-*/+'.includes(pressed_button)) {
-                console.log('After equal: ' + after_equal);
                 if (after_equal) {
                     current_number = '';
                     after_equal = false;
@@ -83,7 +80,6 @@ $("button").click(function() {
                 } else if ((previous_number !== '') && (operator !== '') && (current_number === '')) {
                     operator = pressed_button;
                 } else if ((previous_number !== '') && (current_number !== '')) {
-                    console.log('Result is coming...');
                     try {
                         result = eval(previous_number + operator + current_number);
                         if (result === Infinity) {
@@ -94,11 +90,11 @@ $("button").click(function() {
                         operator = pressed_button;
                         on_the_screen = result.toString();
                     } catch (error) {
-                        console.log('Error session');
                         on_the_screen = error;
                         we_have_error = true;
                     }
                 }
+
             } else if (pressed_button === '%') {
                 try {
                     if ((previous_number !== '') && ('-*/+'.includes(operator)) && (current_number !== '')) {
@@ -117,13 +113,11 @@ $("button").click(function() {
                     we_have_error = true;
                     on_the_screen = error;
                 }
+
             } else if (pressed_button === '=') {
-                console.log('Equal track');
                 if ((previous_number !== '') && (operator !== '') && (current_number !== '')) {
-                    console.log('Equal track 2');
                     try {
                         result = eval(previous_number + operator + current_number);
-                        console.log('Result: ' + result);
                         if (result === Infinity) {
                             throw new Error('division by Zero');
                         }
@@ -139,8 +133,6 @@ $("button").click(function() {
         }
     }      
         
-    
-
     // send screen content to HTML file:
     console.log('To the screen: ' + on_the_screen);
     screen = document.getElementById("screen");  

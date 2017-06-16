@@ -1,13 +1,12 @@
 body {
-    margin: 10% auto;
+    margin: 10px auto;
     background-color: lightgrey;
-    box-sizing: border-box;
 }
 
 .content {
     width: 350px;
 	height: auto;
-	margin: 100px auto;
+	margin: 50px auto;
 	padding: 20px 20px 9px;
     font-family: 'Orbitron', sans-serif;
     color: lightseagreen;
@@ -28,6 +27,7 @@ sup {
 }
 
 #screen {
+    margin: 14px auto;
     letter-spacing: 2px;
     border-style: solid;
     padding: 1% 1% 0 1%;
@@ -39,22 +39,34 @@ sup {
 
 .buttons {
     padding: 3%;
-    
-}
-
-.row1, .row2, .row3, .row4 {
-    display: inline;
     text-align: center;
 }
 
 button {
-    height: 10%;
+    text-align: center;
+    height: 30px;
     width: 16%;
     margin: 1%;
     display: inline-block;
     color: darkslategray;
     font-family : inherit;
     font-size: inherit;
-    text-align: center;
     background-color: lightgray;
+}
+
+#division, #clear, #multiplication, #plusminus, #minus, #equal, #dot, #percentage, #plus {
+    background-color: lightcyan;
+}
+
+#clear {
+    color: red;
+}
+
+#plusminus {
+    vertical-align: bottom;
+}
+
+#equal {
+    color: blue;
+    width: 35.5%;
 }
