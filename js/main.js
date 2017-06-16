@@ -34,8 +34,11 @@ $("button").click(function() {
                     after_equal = false;
                 } else {
                     if (current_number !== '0') {
-                    current_number = current_number + pressed_button;
-                    on_the_screen = current_number;
+                        current_number = current_number + pressed_button;
+                        on_the_screen = current_number;
+                    } else if (current_number === '0') {
+                        current_number = pressed_button;
+                        on_the_screen = current_number;
                     }
                 }
                 
@@ -81,9 +84,15 @@ $("button").click(function() {
                     operator = pressed_button;
                 } else if ((previous_number !== '') && (current_number !== '')) {
                     try {
+                        // avoid invalid left-hand side expression in prefix operation:
+                        if (current_number[0] === '-') {
+                            current_number = '(' + current_number + ')';
+                        }
                         result = eval(previous_number + operator + current_number);
+                        // correct the convertion from binary to decimal:
+                        result = Math.round(result*10000000000)/10000000000;
                         if (result === Infinity) {
-                            throw new Error('division by Zero');
+                            throw new Error('div by Zero');
                         }
                         previous_number = result.toString();
                         current_number = '';
@@ -98,16 +107,21 @@ $("button").click(function() {
             } else if (pressed_button === '%') {
                 try {
                     if ((previous_number !== '') && ('-*/+'.includes(operator)) && (current_number !== '')) {
+                        // avoid invalid left-hand side expression in prefix operation:
+                        if (current_number[0] === '-') {
+                            current_number = '(' + current_number + ')';
+                        }
                         result = eval(previous_number + operator + '(' + previous_number + '*' + (Number(current_number)*0.01).toString() + ')');
                         if (result === Infinity) {
-                            throw new Error('division by Zero');
+                            throw new Error('div by Zero');
                         }
+                        // correct the convertion from binary to decimal
+                        result = Math.round(result*10000000000)/10000000000;
                         previous_number = result.toString();
-                        current_number = '';
-                        operator = '';
+                        after_equal = true;
                         on_the_screen = result.toString();
                     } else {
-                        throw new Error('bad usage of percentage');
+                        throw new Error('bad use %');
                     }
                 } catch (error) {
                     we_have_error = true;
@@ -117,9 +131,15 @@ $("button").click(function() {
             } else if (pressed_button === '=') {
                 if ((previous_number !== '') && (operator !== '') && (current_number !== '')) {
                     try {
+                        // avoid invalid left-hand side expression in prefix operation:
+                        if (current_number[0] === '-') {
+                            current_number = '(' + current_number + ')';
+                        }
                         result = eval(previous_number + operator + current_number);
+                        // correct the convertion from binary to decimal
+                        result = Math.round(result*10000000000)/10000000000;
                         if (result === Infinity) {
-                            throw new Error('division by Zero');
+                            throw new Error('div by Zero');
                         }
                         after_equal = true;
                         previous_number = result.toString();
@@ -134,7 +154,6 @@ $("button").click(function() {
     }      
         
     // send screen content to HTML file:
-    console.log('To the screen: ' + on_the_screen);
     screen = document.getElementById("screen");  
     if (screen.textContent) {
         screen.textContent = on_the_screen;
