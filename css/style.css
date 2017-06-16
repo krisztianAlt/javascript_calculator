@@ -1,0 +1,60 @@
+body {
+    margin: 10% 30%;
+    background-color: lightgrey;
+    box-sizing: border-box;
+}
+
+.content {
+    width: 350px;
+	height: auto;
+	margin: 100px auto;
+	padding: 20px 20px 9px;
+    font-family: 'Orbitron', sans-serif;
+    color: lightseagreen;
+    background-color: grey;
+}
+
+h1 {
+    letter-spacing: 2px;
+    margin: 10px auto;
+    font-size: 1.7em;
+    text-align: center;
+    color: darkslategray;
+}
+
+sup { 
+    vertical-align: super;
+    font-size: small;
+}
+
+#screen {
+    letter-spacing: 2px;
+    border-style: solid;
+    padding: 1% 1% 0 1%;
+    background-color: lightblue;
+    font-size: 1.8em;
+    text-align: right;
+    overflow: hidden;
+}
+
+.buttons {
+    padding: 3%;
+    
+}
+
+.row1, .row2, .row3, .row4 {
+    display: inline;
+    text-align: center;
+}
+
+button {
+    height: 10%;
+    width: 16%;
+    margin: 1%;
+    display: inline-block;
+    color: darkslategray;
+    font-family : inherit;
+    font-size: inherit;
+    text-align: center;
+    background-color: lightgray;
+}
