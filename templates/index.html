@@ -2,8 +2,11 @@
 <html>
     <head>
         <title>JavaScript Calculator</title>
-        <link rel="stylesheet" type="text/css" href='css/style.css'>
+        <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='style.css')}}">
         <link href="https://fonts.googleapis.com/css?family=Orbitron" rel="stylesheet">
+
+        <script src='https://code.jquery.com/jquery-3.2.1.min.js'></script>
+        <script src="{{url_for('static', filename='main.js')}}" defer></script>
     </head>
     <body>
         <div class='content'>
@@ -40,8 +43,6 @@
                     <button id='percentage' value='%'>%</button>                    
                 </div>
             </div>
-            <script src='https://code.jquery.com/jquery-3.2.1.min.js'></script>
-            <script src='js/main.js'></script>
         </div>
     </body>
 </html>
